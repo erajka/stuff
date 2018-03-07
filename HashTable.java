@@ -1,3 +1,4 @@
+import java.util.NoSuchElementException;
 
 public class HashTable<K, V> implements HashTableADT<K, V> {
     /* Instance variables and constructors
@@ -11,10 +12,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      int initialCapacity = 0;
 
     protected class Linkednode<D> {
-        D first;
+        D value;
         Linkednode<D> next;
         public Linkednode(D item) {
-            first = item;
+            value = item;
             next = null;
         }
        
@@ -27,7 +28,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         }
         
         public D getFirst() {
-            return first;
+            return value;
         }
   
     }
@@ -81,13 +82,22 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     }
     @Override
     public void clear() {
-       hashTable = new Linkednode[initialCapacity];
+        for(int i = 0; i < hashTable.length; i++) {
+            hashTable[i] = null;
+        }
+        //both do the same thing 
+     //  hashTable = new Linkednode[initialCapacity];
     }
 
     @Override
     public V get(K key) {
-        //TODO: Implement the get method
-        return null;
+        int hashValue = hashCodeValue(key);
+        if(hashTable[hashValue] == null) {
+            throw new NoSuchElementException();
+        }
+        else {
+            return (V) hashTable[hashValue].value;       
+        }
     }
 
     @Override
@@ -104,8 +114,18 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     @Override
     public V remove(K key) {
-       //TODO: Implement the remove method
-        return null;
+        int hashValue = hashCodeValue(key);
+         V value = null;
+         if(hashTable[hashValue] != null) {
+            Linkednode<V> current = hashTable[hashValue];
+            while(current.getNext() != null) {
+                current = current.getNext();
+            }
+            value = current.value;
+            current = null;
+        }
+        items--;
+        return value;
     }
 
     @Override
