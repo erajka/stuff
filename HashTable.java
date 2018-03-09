@@ -6,10 +6,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     Linkednode[] hashTable; 
     double loadFactor = 0;
     int items = 0; 
-    int[] prime = new int[] {13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 
-            73, 79, 83, 89, 97, 101, 103, 107, 109, 113};
-    int primeIndex = 0;
-     int initialCapacity = 0;
+    int initialCapacity = 0;
 
     protected class Linkednode<D> {
         D value;
