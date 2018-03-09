@@ -70,12 +70,36 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      * @return larger table sized array 
      */
     private Linkednode<V>[] move() {
-        Linkednode<V>[] temp = new Linkednode[prime[primeIndex]];
+    	   int nextLength = getNextPrimeNumber(hashTable.length);
+    	   
+       Linkednode<V>[] temp = new Linkednode[nextLength];
        for(int i = 0; i < hashTable.length; i++) {
            temp[i] = hashTable[i];
        }
         return temp;
         
+    }
+    
+    private int getNextPrimeNumber(int first) {
+    		int num = first + 1;
+    		double rootOfNum = Math.sqrt(num);
+    		int divisor = 2;
+    		boolean isPrime = true;
+    		
+    		while (isPrime) {
+    			while (divisor < rootOfNum) {
+    				if (num % divisor == 0) {
+    					isPrime = false;
+    					break;
+    				}
+    				divisor++;
+    			}
+    			if (!isPrime)
+    				num++;
+    			else
+    				break;
+    		}
+    	    return num;
     }
     private int hashCodeValue(K key) {
         return key.hashCode() % hashTable.length;
