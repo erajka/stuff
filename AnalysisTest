@@ -1,0 +1,27 @@
+public class AnalysisTest {
+    public static void main(String[] args)  {
+
+                // TODO Add code for checking command line arguments
+                
+                PerformanceAnalysisHash ana1 = new PerformanceAnalysisHash("StringSmall.txt");
+                PerformanceAnalysisHash ana2 = new PerformanceAnalysisHash("StringLarge.txt");
+                PerformanceAnalysisHash ana3 = new PerformanceAnalysisHash("IntegerSmall.txt");
+                PerformanceAnalysisHash ana4 = new PerformanceAnalysisHash("IntegerLarge.txt");
+               
+                System.out.println("Performance Analysis Report:");
+                System.out.println("-----------------------------------------------------------------"
+                        + "-------------------------------");
+                System.out.printf("|%20s|%15s|%15s|%25s|%15s|%n", "FileName", "Operation", "Data Structure", "Time Taken (micro sec)", "Bytes Used");
+                System.out.print("-----------------------------------------------------------------"
+                        + "-------------------------------");
+              
+                ana1.compareDataStructures();
+               
+                ana2.compareDataStructures();
+                
+                ana3.compareDataStructures();
+                
+                ana4.compareDataStructures();
+               
+            }
+}
