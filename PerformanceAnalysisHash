@@ -1,22 +1,43 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
     // The input data from each file is stored in this/ per file
     private ArrayList<String> inputData;
+    HashTable hashTableI = null;
+    HashTable hashTableS = null;
+    HashTable hashTable;
+    TreeMap treeMapI = null;
+    TreeMap treeMapS = null;
+    TreeMap treeMap;
+    String fileName;
     
-    public PerformanceAnalysisHash(){
+    public PerformanceAnalysisHash() {
     }
 
     public PerformanceAnalysisHash(String details_filename) {
         //TODO: Save the details of the test data files
         try {
             loadData(details_filename);
+          
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        try {
+            Integer.parseInt(inputData.get(0));
+            hashTableI = new HashTable<Integer, Integer>(11, 0.75);
+            treeMapI = new TreeMap<Integer, Integer>();
+        }
+        catch (Exception e) {
+            hashTableS = new HashTable<String, Integer>(11, 0.75); 
+            treeMapS = new TreeMap<String, Integer>();
+        }
+        
+      
     }
     
     /**
@@ -27,35 +48,72 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
      */
     @Override
     public void compareDataStructures() {
-        //TODO: Complete this function which compares the ds and generates the details
+        if(hashTableI != null) {
+            hashTable = hashTableI;
+            treeMap = treeMapI;
+        }
+        else {
+            hashTable = hashTableS;
+            treeMap = treeMapS;
+        }
+        
+      printReport();
+      
     }
 
     @Override
     public void printReport() {
-        //TODO: Complete this method
+        compareInsertion();
+        
     }
 
     @Override
     public void compareInsertion() {
-        //TODO: Complete this method
-        
+         
+        hashTablePut(hashTable);
+        treeMapPut(treeMap);
+    }
+
+    private void hashTablePut(HashTable hashTable) {
+      //for hash table
+        Runtime runtime = Runtime.getRuntime();
         long startTime = System.currentTimeMillis();
         
-        //put the code here
-        
+        for(int i = 0; i < inputData.size(); i++) {
+             hashTable.put(inputData.get(i), (int) Math.random());
+        }
         long stopTime = System.currentTimeMillis();
         
         long timeTaken = stopTime - startTime;
        
+       
+        runtime.gc();
         
-        //put code here
+        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "PUT", "HASHTABLE", timeTaken, bytesUsed);
+    }
+    
+    private void treeMapPut(TreeMap treeMap) {
+        long startTime = System.currentTimeMillis();
+        
+        for(int i = 0; i < inputData.size(); i++) {
+             treeMap.put(inputData.get(i), (int) Math.random());
+        }
+        long stopTime = System.currentTimeMillis();
+        
+        long timeTaken = stopTime - startTime;
+       
+
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
         long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
         
-    }
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "PUT", "TREEMAP", timeTaken, bytesUsed);
 
+    }
+    
     @Override
     public void compareDeletion() {
         //TODO: Complete this method
@@ -112,6 +170,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     public void loadData(String filename) throws IOException {
 
         // Opens the given test file and stores the objects each line as a string
+        fileName = filename;
         File file = new File(filename);
         BufferedReader br = new BufferedReader(new FileReader(file));
         inputData = new ArrayList<>();
