@@ -98,8 +98,9 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     		}
     	    return num;
     }
+    
     private int hashCodeValue(K key) {
-        return key.hashCode() % hashTable.length;
+        return Math.abs(key.hashCode()) % hashTable.length;
     }
     @Override
     public void clear() {
