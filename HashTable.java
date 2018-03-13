@@ -6,28 +6,17 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     Linkednode[] hashTable; 
     double loadFactor = 0;
     int items = 0; 
-    int initialCapacity = 0;
+     int initialCapacity = 0;
 
-    protected class Linkednode<D> {
-        D value;
-        Linkednode<D> next;
-        public Linkednode(D item) {
-            value = item;
+    protected class Linkednode<D, S> {
+        D key;
+        S value;
+        Linkednode<D, S> next;
+        public Linkednode(D key, S value) {
+            this.value = value;
+            this.key = key;
             next = null;
         }
-       
-        public Linkednode<D> getNext() {
-            return next;
-            }
-        
-        public void setNext(D item) {
-            next = new Linkednode<D>(item);
-        }
-        
-        public D getFirst() {
-            return value;
-        }
-  
     }
     
     public HashTable(int initialCapacity, double loadFactor) {
@@ -46,13 +35,18 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
         int hashValue = hashCodeValue(key); // gets the hashcode value that fits into our array's table size    
        
         if(hashTable[hashValue] == null) { //if the array is empty at the hashvalue index
-            hashTable[hashValue] = new Linkednode<V>(value); //add a new linkednode containing the value here
+            hashTable[hashValue] = new Linkednode<K, V>(key, value); //add a new linkednode containing the value here
         }
         else { //if the array is not null at the hashvalue index
-            Linkednode<V> next = hashTable[hashValue].getNext(); //find the next bucket at the position of hash value
-            while (next != null) //then search until reach the end of all the buckets
-                next = next.getNext();
-            next = new Linkednode<V>(value);// now create a new bucket at this location holding the value entered
+            Linkednode<K, V> current = hashTable[hashValue].next; //find the next bucket at the position of hash value
+            while (current != null) { //then search until reach the end of all the buckets
+                if (key.equals(current.key)) {
+                	     current.value = value;
+                     break;
+                }
+            	    current = current.next;
+            }
+            current = new Linkednode<K, V>(key, value);// now create a new bucket at this location holding the value entered
         }
         items++; //increase number of items in table 
         if(maintainLoadFactor()) { //if the load factor is larger than initial loadFactor set
@@ -66,10 +60,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      * it will copy the old values of the hash table into this new, larger array
      * @return larger table sized array 
      */
-    private Linkednode<V>[] move() {
+    private Linkednode<K, V>[] move() {
     	   int nextLength = getNextPrimeNumber(hashTable.length);
     	   
-       Linkednode<V>[] temp = new Linkednode[nextLength];
+       Linkednode<K, V>[] temp = new Linkednode[nextLength];
        for(int i = 0; i < hashTable.length; i++) {
            temp[i] = hashTable[i];
        }
