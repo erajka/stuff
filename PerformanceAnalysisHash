@@ -114,42 +114,64 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
     }
     
-    @Override
     public void compareDeletion() {
-        //TODO: Complete this method
     
-        long startTime = System.currentTimeMillis();
-        
-        //put the code here
-        
-        long stopTime = System.currentTimeMillis();
-        
-        long timeTaken = stopTime - startTime;
-        
-        
+    	    long calcHashTime = calcHashTimeDelete();
+        long calcTreeTime = calcTreeTimeDelete();
         
         //put code here
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();      
+    }
+    
+    private long calcHashTimeDelete() {
+        long startTime = System.currentTimeMillis();
         
+        HashTable<String, Integer> hash = new HashTable<String, Integer>(11, 0.75);
+        
+        for (String key: inputData) {
+        	    int value = (int) Math.random();
+        	    
+        	    hash.put(key, value);
+        }
+        
+        for (String key: inputData) {
+        	    hash.remove(key);
+        }
+        
+        long stopTime = System.currentTimeMillis();
+        
+        return stopTime - startTime;
+    }
+    
+    private long calcTreeTimeDelete() {
+        long startTime = System.currentTimeMillis();
+        
+        TreeMap<String, Integer> treeMap = new TreeMap<String, Integer>();
+
+        for (String key: inputData) {
+        	    int value = (int) Math.random();
+        	    
+        	    treeMap.put(key, value);
+        }
+        
+        for (String key: inputData) {
+        	    treeMap.remove(key);
+        }
+        
+        long stopTime = System.currentTimeMillis();
+        
+        return stopTime - startTime;
     }
 
     @Override
     public void compareSearch() {
-        //TODO: Complete this method
-    
-        long startTime = System.currentTimeMillis();
         
-        //put the code here
-        
-        long stopTime = System.currentTimeMillis();
-        
-        long timeTaken = stopTime - startTime;
-        
-        
-        
+        long calcHashTime = calcHashTimeSearch();
+        long calcTreeTime = calcTreeTimeSearch();
+
         //put code here
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
@@ -159,6 +181,45 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         
     }
     
+    private long calcTreeTimeSearch() {
+        long startTime = System.currentTimeMillis();
+        
+        TreeMap<String, Integer> treeMap = new TreeMap<String, Integer>();
+
+        for (String key: inputData) {
+        	    int value = (int) Math.random();
+        	    
+        	    treeMap.put(key, value);
+        }
+        
+        for (String key: inputData) {
+        	    treeMap.get(key);
+        }
+        
+        long stopTime = System.currentTimeMillis();
+        
+        return stopTime - startTime;
+    }
+    
+    private long calcHashTimeSearch() {
+        long startTime = System.currentTimeMillis();
+        
+        HashTable<String, Integer> hash = new HashTable<String, Integer>(11, 0.75);
+        
+        for (String key: inputData) {
+        	    int value = (int) Math.random();
+        	    
+        	    hash.put(key, value);
+        }
+        
+        for (String key: inputData) {
+        	    hash.get(key);
+        }
+        
+        long stopTime = System.currentTimeMillis();
+        
+        return stopTime - startTime;
+    }
     
 
     /*
