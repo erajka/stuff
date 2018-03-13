@@ -118,7 +118,20 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
             throw new NoSuchElementException();
         }
         else {
-            return (V) hashTable[hashValue].value;       
+        	    Linkednode<K, V> current = hashTable[hashValue];
+          	K hashKey = (K) current.key;
+          	V val = (V) current.value;
+        
+        	    while(!hashKey.equals(key)) {
+        	    	     if (current.next == null) {
+        	    	    	      throw new NoSuchElementException();
+        	    	     }
+        	         
+        	         current = current.next;
+        	         hashKey = (K) current.key;
+        	         val = (V) current.value;
+        	    }
+        	    return val;
         }
     }
 
@@ -135,19 +148,36 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     }
 
     @Override
-    public V remove(K key) {
+    public V get(K key) {
         int hashValue = hashCodeValue(key);
-         V value = null;
-         if(hashTable[hashValue] != null) {
-            Linkednode<V> current = hashTable[hashValue];
-            while(current.getNext() != null) {
-                current = current.getNext();
-            }
-            value = current.value;
-            current = null;
+        if(hashTable[hashValue] == null) {
+            throw new NoSuchElementException();
         }
-        items--;
-        return value;
+        else {
+        	    Linkednode<K, V> past = null;
+        	    Linkednode<K, V> current = hashTable[hashValue];
+          	K hashKey = (K) current.key;
+          	V val = (V) current.value;
+          	
+        	    while(!hashKey.equals(key)) {
+        	    	     if (current.next == null) {
+        	    	    	      throw new NoSuchElementException();
+        	    	     }
+        	         
+        	    	     past = current;
+        	         current = current.next;
+        	         hashKey = (K) current.key;
+        	         val = (V) current.value;
+        	    }
+        	    if (past == null) {
+        	    	    current = current.next;
+                }
+        	    else {
+        	        past.next = current.next;
+                }
+        	    items--;
+        	    return val;
+        }
     }
 
     @Override
