@@ -64,7 +64,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     @Override
     public void printReport() {
         compareInsertion();
-        
+        compareSearch();
     }
 
     @Override
@@ -77,6 +77,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     private void hashTablePut(HashTable hashTable) {
       //for hash table
         Runtime runtime = Runtime.getRuntime();
+        
         long startTime = System.currentTimeMillis();
         
         for(int i = 0; i < inputData.size(); i++) {
@@ -114,114 +115,82 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
     }
     
-    public void compareDeletion() {
-    
-    	    long calcHashTime = calcHashTimeDelete();
-        long calcTreeTime = calcTreeTimeDelete();
-        
-        //put code here
-        Runtime runtime = Runtime.getRuntime();
-        runtime.gc();
-        
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();      
-    }
-    
-    private long calcHashTimeDelete() {
-        long startTime = System.currentTimeMillis();
-        
-        HashTable<String, Integer> hash = new HashTable<String, Integer>(11, 0.75);
-        
-        for (String key: inputData) {
-        	    int value = (int) Math.random();
-        	    
-        	    hash.put(key, value);
-        }
-        
-        for (String key: inputData) {
-        	    hash.remove(key);
-        }
-        
-        long stopTime = System.currentTimeMillis();
-        
-        return stopTime - startTime;
-    }
-    
-    private long calcTreeTimeDelete() {
-        long startTime = System.currentTimeMillis();
-        
-        TreeMap<String, Integer> treeMap = new TreeMap<String, Integer>();
-
-        for (String key: inputData) {
-        	    int value = (int) Math.random();
-        	    
-        	    treeMap.put(key, value);
-        }
-        
-        for (String key: inputData) {
-        	    treeMap.remove(key);
-        }
-        
-        long stopTime = System.currentTimeMillis();
-        
-        return stopTime - startTime;
-    }
-
     @Override
-    public void compareSearch() {
+    public void compareDeletion() {
+        //TODO: Complete this method
+    
+        long startTime = System.currentTimeMillis();
         
-        long calcHashTime = calcHashTimeSearch();
-        long calcTreeTime = calcTreeTimeSearch();
-
+        //put the code here
+        
+        long stopTime = System.currentTimeMillis();
+        
+        long timeTaken = stopTime - startTime;
+        
+        
+        
         //put code here
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
         long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
         
+    }
+
+    @Override
+    public void compareSearch() {
+        //TODO: Complete this method
+    
+       hashTableGet(hashTable);
+       treeMapGet(treeMap);
+        
         
     }
     
-    private long calcTreeTimeSearch() {
+    private void hashTableGet(HashTable hashTable) {
         long startTime = System.currentTimeMillis();
         
-        TreeMap<String, Integer> treeMap = new TreeMap<String, Integer>();
-
-        for (String key: inputData) {
-        	    int value = (int) Math.random();
-        	    
-        	    treeMap.put(key, value);
-        }
         
-        for (String key: inputData) {
-        	    treeMap.get(key);
+        for(int i = 0; i < inputData.size(); i++) {
+             hashTable.get(inputData.get(i));
         }
         
         long stopTime = System.currentTimeMillis();
         
-        return stopTime - startTime;
+        long timeTaken = stopTime - startTime;
+        
+       
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        
+        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "GET", "HASHTABLE", timeTaken, bytesUsed);
+
     }
-    
-    private long calcHashTimeSearch() {
+
+    private void treeMapGet(TreeMap treeMap) {
         long startTime = System.currentTimeMillis();
         
-        HashTable<String, Integer> hash = new HashTable<String, Integer>(11, 0.75);
         
-        for (String key: inputData) {
-        	    int value = (int) Math.random();
-        	    
-        	    hash.put(key, value);
+        for(int i = 0; i < inputData.size(); i++) {
+             treeMap.get(inputData.get(i));
         }
-        
-        for (String key: inputData) {
-        	    hash.get(key);
-        }
-        
+            
         long stopTime = System.currentTimeMillis();
         
-        return stopTime - startTime;
+        long timeTaken = stopTime - startTime;
+        
+       
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        
+        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "GET", "TREEMAP", timeTaken, bytesUsed);
+
     }
     
-
     /*
     An implementation of loading files into local data structure is provided to you
     Please feel free to make any changes if required as per your implementation.
