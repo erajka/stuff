@@ -1,8 +1,6 @@
 public class AnalysisTest {
     public static void main(String[] args)  {
 
-                // TODO Add code for checking command line arguments
-                
                 PerformanceAnalysisHash ana1 = new PerformanceAnalysisHash("StringSmall.txt");
                 PerformanceAnalysisHash ana2 = new PerformanceAnalysisHash("StringLarge.txt");
                 PerformanceAnalysisHash ana3 = new PerformanceAnalysisHash("IntegerSmall.txt");
