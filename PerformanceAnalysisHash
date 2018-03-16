@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
 public class PerformanceAnalysisHash implements PerformanceAnalysis {
@@ -65,6 +66,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     public void printReport() {
         compareInsertion();
         compareSearch();
+        compareDeletion();
     }
 
     @Override
@@ -117,30 +119,66 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     
     @Override
     public void compareDeletion() {
-        //TODO: Complete this method
+        hashTableRemove(hashTable);
+        treeMapRemove(treeMap);
+    }
     
+    private void hashTableRemove(HashTable hashTable) {
+        Runtime runtime = Runtime.getRuntime();
+        
         long startTime = System.currentTimeMillis();
         
-        //put the code here
-        
+        for(int i = 0; i < inputData.size(); i++) {
+            try {
+            hashTable.remove(inputData.get(i));
+            }
+            catch(NoSuchElementException e) {
+                
+            }
+        }
         long stopTime = System.currentTimeMillis();
         
         long timeTaken = stopTime - startTime;
-        
-        
-        
-        //put code here
-        Runtime runtime = Runtime.getRuntime();
+       
+       
         runtime.gc();
         
         long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
         
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "REMOVE", "HASHTABLE", timeTaken, bytesUsed);
+
+    }
+    
+    private void treeMapRemove(TreeMap treeMap) {
+        Runtime runtime = Runtime.getRuntime();
+        
+        long startTime = System.currentTimeMillis();
+        for(int i = 0; i < inputData.size(); i++) {
+            try {
+                treeMap.remove(inputData.get(i));
+            }
+            catch(NoSuchElementException e) {
+                
+            }
+        }
+        
+        
+        long stopTime = System.currentTimeMillis();
+        
+        long timeTaken = stopTime - startTime;
+       
+       
+        runtime.gc();
+        
+        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "REMOVE", "TREEMAP", timeTaken, bytesUsed);
+
     }
 
     @Override
     public void compareSearch() {
-        //TODO: Complete this method
-    
+       
        hashTableGet(hashTable);
        treeMapGet(treeMap);
         
@@ -152,7 +190,12 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         
         
         for(int i = 0; i < inputData.size(); i++) {
-             hashTable.get(inputData.get(i));
+            try { 
+                hashTable.get(inputData.get(i));
+            }
+            catch(NoSuchElementException e) {
+                
+            }
         }
         
         long stopTime = System.currentTimeMillis();
@@ -174,7 +217,12 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         
         
         for(int i = 0; i < inputData.size(); i++) {
-             treeMap.get(inputData.get(i));
+            try { 
+                treeMap.get(inputData.get(i));
+            }
+            catch(NoSuchElementException e) {
+                
+            }
         }
             
         long stopTime = System.currentTimeMillis();
