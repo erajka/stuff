@@ -72,10 +72,10 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
             Linkednode<K, V> current = hashTable[hashValue].next; //find the next bucket at the position of hash value
             while (current != null) { //then search until reach the end of all the buckets
                 if (key.equals(current.key)) { //if the key is already in the linked list
-                         current.value = value; //change the value at this key to the new value 
-                     break;
+                    current.value = value; //change the value at this key to the new value 
+                    break;
                 }
-                    current = current.next; //otherwise keep incrementing until reach the end of the linkednodes
+                current = current.next; //otherwise keep incrementing until reach the end of the linkednodes
             }
             current = new Linkednode<K, V>(key, value);// now create a new bucket at this location holding the value entered
         }
@@ -92,16 +92,22 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
      * @return larger table sized array 
      */
     private Linkednode<K, V>[] move() {
-           int nextLength = getNextPrimeNumber(hashTable.length);
+       int resized = getNextPrimeNumber(hashTable.length); //obtains the value of the size of new array
            
-       Linkednode<K, V>[] temp = new Linkednode[nextLength];
+       Linkednode<K, V>[] resizedHashTable = new Linkednode[resized]; //make a temp array that is the size we just obtained
        for(int i = 0; i < hashTable.length; i++) {
-           temp[i] = hashTable[i];
+           resizedHashTable[i] = hashTable[i]; //put the values of hashTable into temp array
        }
-        return temp;
+        return resizedHashTable; //return the larger new array
         
     }
     
+    /**
+     * a helper method that will resize the hash table to double the size
+     * then rounded to the nearest prime number 
+     * @param first
+     * @return the new size of the array 
+     */
     private int getNextPrimeNumber(int first) {
         int num = 2*first + 1;
         double rootOfNum = Math.sqrt(num);
