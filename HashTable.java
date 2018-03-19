@@ -70,7 +70,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     }
     
     private int getNextPrimeNumber(int first) {
-        int num = first + 1;
+        int num = 2*first + 1;
         double rootOfNum = Math.sqrt(num);
         int divisor = 2;
         boolean isPrime = true;
