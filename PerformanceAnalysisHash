@@ -78,34 +78,37 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
     private void hashTablePut(HashTable hashTable) {
       //for hash table
-        Runtime runtime = Runtime.getRuntime();
         
-        long startTime = System.currentTimeMillis();
+        
+        long startTime = System.nanoTime();
         
         for(int i = 0; i < inputData.size(); i++) {
              hashTable.put(inputData.get(i), (int) Math.random());
         }
-        long stopTime = System.currentTimeMillis();
+        long stopTime = System.nanoTime();
         
-        long timeTaken = stopTime - startTime;
+        long timeTaken = (stopTime - startTime) / 1000;
        
-       
+        Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        long total = runtime.totalMemory();
+        long free = runtime.freeMemory();
+        
+        long bytesUsed = total - free;
         
         System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "PUT", "HASHTABLE", timeTaken, bytesUsed);
     }
     
     private void treeMapPut(TreeMap treeMap) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         
         for(int i = 0; i < inputData.size(); i++) {
              treeMap.put(inputData.get(i), (int) Math.random());
         }
-        long stopTime = System.currentTimeMillis();
+        long stopTime = System.nanoTime();
         
-        long timeTaken = stopTime - startTime;
+        long timeTaken = (stopTime - startTime) / 1000;
        
 
         Runtime runtime = Runtime.getRuntime();
@@ -124,9 +127,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     }
     
     private void hashTableRemove(HashTable hashTable) {
-        Runtime runtime = Runtime.getRuntime();
         
-        long startTime = System.currentTimeMillis();
+        
+        long startTime = System.nanoTime();
         
         for(int i = 0; i < inputData.size(); i++) {
             try {
@@ -136,11 +139,11 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
                 
             }
         }
-        long stopTime = System.currentTimeMillis();
+        long stopTime = System.nanoTime();
         
-        long timeTaken = stopTime - startTime;
+        long timeTaken =  (stopTime - startTime) / 1000;
        
-       
+        Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
         long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
@@ -150,9 +153,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     }
     
     private void treeMapRemove(TreeMap treeMap) {
-        Runtime runtime = Runtime.getRuntime();
         
-        long startTime = System.currentTimeMillis();
+        
+        long startTime = System.nanoTime();
         for(int i = 0; i < inputData.size(); i++) {
             try {
                 treeMap.remove(inputData.get(i));
@@ -163,11 +166,11 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         }
         
         
-        long stopTime = System.currentTimeMillis();
+        long stopTime = System.nanoTime();
         
-        long timeTaken = stopTime - startTime;
+        long timeTaken = (stopTime - startTime) / 1000;
        
-       
+        Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
         long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
@@ -186,7 +189,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     }
     
     private void hashTableGet(HashTable hashTable) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         
         
         for(int i = 0; i < inputData.size(); i++) {
@@ -198,9 +201,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
             }
         }
         
-        long stopTime = System.currentTimeMillis();
+        long stopTime = System.nanoTime();
         
-        long timeTaken = stopTime - startTime;
+        long timeTaken =  (stopTime - startTime) / 1000;
         
        
         Runtime runtime = Runtime.getRuntime();
@@ -213,7 +216,7 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
     }
 
     private void treeMapGet(TreeMap treeMap) {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         
         
         for(int i = 0; i < inputData.size(); i++) {
@@ -225,9 +228,9 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
             }
         }
             
-        long stopTime = System.currentTimeMillis();
+        long stopTime = System.nanoTime();
         
-        long timeTaken = stopTime - startTime;
+        long timeTaken = (stopTime - startTime) / 1000;
         
        
         Runtime runtime = Runtime.getRuntime();
