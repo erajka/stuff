@@ -146,11 +146,9 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
     /**
      * method to set all the indexes in the array to null
      */
-    @Override
+     @Override
     public void clear() {
-        for(int i = 0; i < hashTable.length; i++) {
-            hashTable[i] = null;
-        }
+        hashTable = new Linkednode[initialCapacity]; //sets hashTable to a new empty array of original size
     }
 
     /**
