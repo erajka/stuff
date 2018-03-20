@@ -1,3 +1,16 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//    P3 Hashtable and Performance Analysis
+//    Authors: Emilie Rajka and Genevieve Capolongo
+//    Email: erajka@wisc.edu  gcapolongo@wisc.edu 
+//    Date: Monday, March 19th, 2018
+//
+//    Instructor: Debra Deppeler
+//    Email: deppeler@wisc.edu
+//
+//    Files: No files used
+//    Bugs: No none bugs
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import java.util.NoSuchElementException;
 
 public class HashTable<K, V> implements HashTableADT<K, V> {
@@ -8,7 +21,7 @@ public class HashTable<K, V> implements HashTableADT<K, V> {
 
     /**
      * Inner protected class that has our implementation
-     * of linkednodes. this class creates  linkednodes
+     * of linkednodes. this class creates linkednodes
      * that point to each other 
      *
      * @param <D> the generic key 
