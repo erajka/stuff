@@ -1,25 +1,42 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//    P3 Hashtable and Performance Analysis
+//    Authors: Emilie Rajka and Genevieve Capolongo
+//    Email: erajka@wisc.edu  gcapolongo@wisc.edu 
+//    Date: Monday, March 19th, 2018
+//
+//    Instructor: Debra Deppeler
+//    Email: deppeler@wisc.edu
+//
+//    Files: No files used
+//    Bugs: No none bugs
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 import java.io.*;
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
-import java.util.TreeMap;
+import java.util.*;
 
 public class PerformanceAnalysisHash implements PerformanceAnalysis {
 
-    // The input data from each file is stored in this/ per file
-    private ArrayList<String> inputData;
-    HashTable hashTableI = null;
-    HashTable hashTableS = null;
-    HashTable hashTable;
-    TreeMap treeMapI = null;
-    TreeMap treeMapS = null;
-    TreeMap treeMap;
+    //the input data from each file is stored in this/ per file
+    private ArrayList<String> inputData; //the arrayList for the data extracted from the inputed file
+    HashTable hashTableI = null; //hashTable used if the inputed data is an integer
+    HashTable hashTableS = null; //hashTable used if the inputed data is a string
+    HashTable hashTable; //hashTable used once the type of data inputed is determined
+    TreeMap treeMapI = null; //treeMap used if the inputed data is an integer
+    TreeMap treeMapS = null; //treeMap used if the inputed data is a string
+    TreeMap treeMap; //treeMap used once the type of data is determined
     String fileName;
     
     public PerformanceAnalysisHash() {
     }
 
+    /**
+     * Constructor that generate the hashTable and the treeMap
+     * 
+     * @param details_filename the filename for the inputed data
+     */
     public PerformanceAnalysisHash(String details_filename) {
        
+    	    fileName = details_filename.substring(5, details_filename.length());
         try {
             loadData(details_filename);
           
@@ -28,12 +45,13 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
             e.printStackTrace();
         }
         
-        try {
+        try { //interprets the data as an integer
             Integer.parseInt(inputData.get(0));
             hashTableI = new HashTable<Integer, Integer>(11, 0.75);
             treeMapI = new TreeMap<Integer, Integer>();
         }
-        catch (Exception e) {
+        //if the data is a string the exception is caught and interpreted as a string
+        catch (Exception e) { 
             hashTableS = new HashTable<String, Integer>(11, 0.75); 
             treeMapS = new TreeMap<String, Integer>();
         }
@@ -49,11 +67,11 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
      */
     @Override
     public void compareDataStructures() {
-        if(hashTableI != null) {
+        if(hashTableI != null) { //if the inputed data are integers
             hashTable = hashTableI;
             treeMap = treeMapI;
         }
-        else {
+        else { //if the inputed data are strings
             hashTable = hashTableS;
             treeMap = treeMapS;
         }
@@ -62,32 +80,44 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
       
     }
 
+    /**
+     * prints the table comparing the treeMap and hashTable
+     * calls helper methods that compare the data structures' methods
+     */
     @Override
     public void printReport() {
-        
         compareInsertion();
         compareSearch();
         compareDeletion();
     }
 
+    /**
+     * helper method that compares the put method of a hashTable
+     * to the put method of a treeMap
+     * 
+     * calls additional helper methods
+     */
     @Override
     public void compareInsertion() {
-         
-        hashTablePut(hashTable);
-        treeMapPut(treeMap);
+        hashTablePut();
+        treeMapPut();
     }
 
-    private void hashTablePut(HashTable hashTable) {
-      //for hash table
-        
-        long startTime = System.nanoTime();
+    /**
+     * helper method that gets the time taken and bytes used in
+     * the put method of a hashTable
+     * 
+     * prints the resulting numbers
+     */
+    private void hashTablePut() {
+        long startTime = System.nanoTime(); //starts the timer
         
         for(int i = 0; i < inputData.size(); i++) {
-             hashTable.put(inputData.get(i), (int) Math.random());
+             hashTable.put(inputData.get(i), (int) Math.random()); //inputs the data in the hashTable
         }
-        long stopTime = System.nanoTime();
+        long stopTime = System.nanoTime(); //stops the timer
         
-        long timeTaken = (stopTime - startTime) / 1000;
+        long timeTaken = (stopTime - startTime) / 1000; //calculates the time taken
        
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
@@ -95,163 +125,219 @@ public class PerformanceAnalysisHash implements PerformanceAnalysis {
         long total = runtime.totalMemory();
         long free = runtime.freeMemory();
         
-        long bytesUsed = total - free;
+        long bytesUsed = total - free; //calculates the number of bytes used
         
+        //prints the calculated numbers from the hashTable put method
         System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "PUT", "HASHTABLE", timeTaken, bytesUsed);
     }
     
-    private void treeMapPut(TreeMap treeMap) {
-        long startTime = System.nanoTime();
+    /**
+     * helper method that gets the time taken and bytes used in
+     * the put method of a treeMap
+     * 
+     * prints the resulting number
+     */
+    private void treeMapPut() {
+        long startTime = System.nanoTime(); //starts the timer
         
         for(int i = 0; i < inputData.size(); i++) {
-             treeMap.put(inputData.get(i), (int) Math.random());
+             treeMap.put(inputData.get(i), (int) Math.random()); //inputs the data in the treeMap
         }
-        long stopTime = System.nanoTime();
+        long stopTime = System.nanoTime(); //ends the timer
         
-        long timeTaken = (stopTime - startTime) / 1000;
+        long timeTaken = (stopTime - startTime) / 1000; //calculates the time taken
        
 
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        long total = runtime.totalMemory();
+        long free = runtime.freeMemory();
         
+        long bytesUsed = total - free; //calculates the number of bytes used
+        
+        //prints the calculated numbers from the treeMap put method
         System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "PUT", "TREEMAP", timeTaken, bytesUsed);
 
     }
-    
-    @Override
-    public void compareDeletion() {
-        hashTableRemove(hashTable);
-        treeMapRemove(treeMap);
-    }
-    
-    private void hashTableRemove(HashTable hashTable) {
-        
-        
-        long startTime = System.nanoTime();
-        
-        for(int i = 0; i < inputData.size() / 2; i++) {
-            try {
-                hashTable.remove(inputData.get(i));
-            }
-            catch(NoSuchElementException e) {
-                
-            }
-        }
-        long stopTime = System.nanoTime();
-        
-        long timeTaken =  (stopTime - startTime) / 1000;
-       
-        Runtime runtime = Runtime.getRuntime();
-        runtime.gc();
-        
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
-        
-        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "REMOVE", "HASHTABLE", timeTaken, bytesUsed);
 
-    }
-    
-    private void treeMapRemove(TreeMap treeMap) {
-        
-        
-        long startTime = System.nanoTime();
-        for(int i = 0; i < inputData.size() / 2; i++) {
-            try {
-                treeMap.remove(inputData.get(i));
-            }
-            catch(NoSuchElementException e) {
-                
-            }
-        }
-        
-        
-        long stopTime = System.nanoTime();
-        
-        long timeTaken = (stopTime - startTime) / 1000;
-       
-        Runtime runtime = Runtime.getRuntime();
-        runtime.gc();
-        
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
-        
-        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "REMOVE", "TREEMAP", timeTaken, bytesUsed);
-
-    }
-
+    /**
+     * helper method that compares the get method of a hashTable
+     * to the get method of a treeMap
+     * 
+     * calls additional helper methods
+     */
     @Override
     public void compareSearch() {
-       
-       hashTableGet(hashTable);
-       treeMapGet(treeMap);
-        
-        
+       hashTableGet();
+       treeMapGet();
     }
     
-    private void hashTableGet(HashTable hashTable) {
-        long startTime = System.nanoTime();
+    /**
+     * helper method that gets the time taken and bytes used in
+     * the get method of a treeMap
+     * 
+     * prints the resulting number
+     */
+    private void hashTableGet() {
+        long startTime = System.nanoTime(); //starts the timer
         
         
         for(int i = 0; i < inputData.size() / 2; i++) {
             try { 
-                hashTable.get(inputData.get(i));
+                hashTable.get(inputData.get(i)); //searches for the data inputed in the hashTable
             }
-            catch(NoSuchElementException e) {
+            catch(NoSuchElementException e) { //if the elements was removed or changed catches the exception
                 
             }
         }
         
-        long stopTime = System.nanoTime();
+        long stopTime = System.nanoTime(); //stops the timer
         
-        long timeTaken =  (stopTime - startTime) / 1000;
+        long timeTaken = (long) (stopTime - startTime) / 1000; //calculates the time taken
         
        
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        long total = runtime.totalMemory();
+        long free = runtime.freeMemory();
         
+        long bytesUsed = total - free; //calculates the number of bytes used
+        
+        //prints the calculated numbers from the hashTable get method
         System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "GET", "HASHTABLE", timeTaken, bytesUsed);
 
     }
 
-    private void treeMapGet(TreeMap treeMap) {
-        long startTime = System.nanoTime();
+    /**
+     * helper method that gets the time taken and bytes used in
+     * the get method of a treeMap
+     * 
+     * prints the resulting number
+     */
+    private void treeMapGet() {
+        long startTime = System.nanoTime(); //starts the timer
         
         
         for(int i = 0; i < inputData.size() / 2; i++) {
             try { 
-                treeMap.get(inputData.get(i));
+                treeMap.get(inputData.get(i)); //searches for the inputed data in the treeMap
             }
-            catch(NoSuchElementException e) {
+            catch(NoSuchElementException e) { //catches the exception if the data is not found or changed
                 
             }
         }
             
-        long stopTime = System.nanoTime();
+        long stopTime = System.nanoTime(); //stops the timer
         
-        long timeTaken = (stopTime - startTime) / 1000;
+        long timeTaken = (stopTime - startTime) / 1000; //calculates the time taken
         
        
         Runtime runtime = Runtime.getRuntime();
         runtime.gc();
         
-        long bytesUsed = runtime.totalMemory() - runtime.freeMemory();
+        long total = runtime.totalMemory();
+        long free = runtime.freeMemory();
         
+        long bytesUsed = total - free; //calculates the number of bytes used
+        
+        //prints the calculated numbers from the treeMap get method
         System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "GET", "TREEMAP", timeTaken, bytesUsed);
 
     }
     
-    /*
-    An implementation of loading files into local data structure is provided to you
-    Please feel free to make any changes if required as per your implementation.
-    However, this function can be used as is.
+    /**
+     * helper method that compares the remove method of a hashTable
+     * to the remove method of a treeMap
+     * 
+     * calls additional helper methods
+     */
+    @Override
+    public void compareDeletion() {
+        hashTableRemove();
+        treeMapRemove();
+    }
+    
+    /**
+     * helper method that gets the time taken and bytes used in
+     * the remove method of a treeMap
+     * 
+     * prints the resulting number
+     */
+    private void hashTableRemove() {
+        long startTime = System.nanoTime(); //starts the timer
+        
+        for(int i = 0; i < inputData.size() / 2; i++) {
+            try {
+                hashTable.remove(inputData.get(i)); //removes the data from the hashTable
+            }
+            catch(NoSuchElementException e) { //catches the exception if the data is not found
+                
+            }
+        }
+        long stopTime = System.nanoTime(); //stops the timer
+        
+        long timeTaken =  (long) (stopTime - startTime) / 1000; //calculates the time taken
+       
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        
+        long total = runtime.totalMemory();
+        long free = runtime.freeMemory();
+        
+        long bytesUsed = total - free; //calculates the number of bytes used
+        
+        //prints the calculated numbers from the hashTable remove method
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "REMOVE", "HASHTABLE", timeTaken, bytesUsed);
+
+    }
+    
+    /**
+     * helper method that gets the time taken and bytes used in
+     * the remove method of a treeMap
+     * 
+     * prints the resulting number
+     */
+    private void treeMapRemove() {
+        long startTime = System.nanoTime(); //starts the timer
+        for(int i = 0; i < inputData.size() / 2; i++) {
+            try {
+                treeMap.remove(inputData.get(i)); //removes the data from the treeMap
+            }
+            catch(NoSuchElementException e) { //catches the exception if the data is not found
+                
+            }
+        }
+        
+        
+        long stopTime = System.nanoTime(); //stops the timer
+        
+        long timeTaken = (long) (stopTime - startTime) / 1000; //calculates the time taken
+       
+        Runtime runtime = Runtime.getRuntime();
+        runtime.gc();
+        
+        long total = runtime.totalMemory();
+        long free = runtime.freeMemory();
+        
+        long bytesUsed = total - free; //calculates the number of bytes used
+        
+        //prints the calculated numbers from the treeMap remove method
+        System.out.printf("%n|%20s|%15s|%15s|%25d|%15d|", fileName, "REMOVE", "TREEMAP", timeTaken, bytesUsed);
+
+    }
+    
+    /**
+     * An implementation of loading files into local data structure is provided to you
+     * Please feel free to make any changes if required as per your implementation.
+     * However, this function can be used as is.
      */
     @Override
     public void loadData(String filename) throws IOException {
 
-        // Opens the given test file and stores the objects each line as a string
-        fileName = filename;
+        //opens the given test file and stores the objects each line as a string
+    	    //eventually, this data will be interpreted as either a string or an integer
         File file = new File(filename);
         BufferedReader br = new BufferedReader(new FileReader(file));
         inputData = new ArrayList<>();
