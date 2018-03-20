@@ -1,6 +1,23 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//    P3 Hashtable and Performance Analysis
+//    Authors: Emilie Rajka and Genevieve Capolongo
+//    Email: erajka@wisc.edu  gcapolongo@wisc.edu 
+//    Date: Monday, March 19th, 2018
+//
+//    Instructor: Debra Deppeler
+//    Email: deppeler@wisc.edu
+//
+//    Files: No files used
+//    Bugs: No none bugs
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 public class AnalysisTest {
     public static void main(String[] args)  {
     
+    	    //creates a table to compare the hashTable implemented against 
+    	    //the treemap data structure in java
+    	    //specifically compares the remove, put and get method
+    	    //and the number of bytes used and time taken for each method stated
         System.out.println("Performance Analysis Report:");
         System.out.println("-----------------------------------------------------------------"
                 + "-------------------------------");
@@ -8,20 +25,23 @@ public class AnalysisTest {
         System.out.print("-----------------------------------------------------------------"
                 + "-------------------------------");
        
-        PerformanceAnalysisHash ana1 = new PerformanceAnalysisHash("StringSmall.txt");
+        //first the data structures are compared by using a small file of strings
+        PerformanceAnalysisHash ana1 = new PerformanceAnalysisHash("data/StringSmall.txt"); 
         ana1.compareDataStructures();
         
-        PerformanceAnalysisHash ana2 = new PerformanceAnalysisHash("StringLarge.txt");
+        //next the data structures are compared by using a larger file of strings
+        PerformanceAnalysisHash ana2 = new PerformanceAnalysisHash("data/StringLarge.txt"); 
         ana2.compareDataStructures();
         
-        PerformanceAnalysisHash ana3 = new PerformanceAnalysisHash("IntegerSmall.txt");
+        //next the data structures are compared by using a small file of integers
+        PerformanceAnalysisHash ana3 = new PerformanceAnalysisHash("data/IntegerSmall.txt");
         ana3.compareDataStructures();
         
-        PerformanceAnalysisHash ana4 = new PerformanceAnalysisHash("IntegerLarge.txt");
+        //lastly, the two structures are compared by using a larger file of integers
+        PerformanceAnalysisHash ana4 = new PerformanceAnalysisHash("data/IntegerLarge.txt");
         ana4.compareDataStructures();
      
         System.out.println("\n-----------------------------------------------------------------"
-                + "-------------------------------");
-                                    
+                + "-------------------------------");                                
     }
 }
